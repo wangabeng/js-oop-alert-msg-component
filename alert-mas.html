@@ -1,0 +1,188 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+
+<style>
+*{
+	margin:0;
+	padding:0;
+}
+.default-dialog{
+	width:300px;
+	height:100px;
+	position:absolute;
+	left:10px;
+	top:50px;
+	background-color:blue;
+	display:none;
+}
+.center{
+	display: block;
+	background-color:blue;
+	width:600px;
+	height:200px;
+}
+.alignright{
+	display: block;
+	background-color:red;
+}
+.title{
+	width:100%;
+	height:30px;
+	background:gray;
+}
+.closeicon{
+	position:absolute;
+	top:5px;
+	right:15px;
+	color:white;
+}
+
+.mask{
+	width:100%;
+	height:100%;
+	position:fixed;
+	background-color:gray;
+	left:0;
+	top:0;
+	opacity:0.3;
+	z-index:-100;
+	display:none;
+}
+
+</style>
+
+</head>
+<script>
+	window.onload=function(){
+		var dialog1=new Dialog();
+		dialog1.init({//形参
+				idname:'centerDia',
+				changeClass:'default-dialog center',//可以个性化添加任意多的样式
+				maskDisplay:false,
+				disCenter:true,
+				diaTitle:'居中显示的内容'
+		});
+
+		var dialog2=new Dialog();
+		dialog2.init({//形参
+				idname:'centerDia2',
+				changeClass:'default-dialog center',
+				maskDisplay:true,
+				disCenter:true,
+				diaTitle:'居中显示加遮罩'
+		});
+
+		var dialog3=new Dialog();
+		dialog3.init({//形参
+				idname:'centerDia3',
+				changeClass:'default-dialog alignright',
+				maskDisplay:false,
+				disCenter:false,
+				diaTitle:'右下方显示 红色背景'
+		});
+	};
+
+	function Dialog(){
+		this.name='';
+		this.settings={//默认参数
+			idname:'',
+			changeClass:'',
+			maskDisplay:null,
+			disCenter:null,
+			diaTitle:''
+		}
+		this.oBtn=null;
+		this.dialog=null;
+		this.closeicon=null;
+		this.mask=document.getElementById('mask');
+		this.title=null;
+	}
+	
+	Dialog.prototype.init=function(opt){
+		//先覆盖默认参数
+		extendings(this.settings,opt)
+		var That=this;
+		this.oBtn=document.getElementById(this.settings.idname);
+		this.oBtn.onclick=function(){
+			That.createDia();
+			//console.log('clickde shih:'+this);//this指向被点击的btn  this.btn
+		}	
+	}	
+
+	Dialog.prototype.createDia=function(){
+		this.dialog=document.getElementById('dialog');
+		//console.log(this);新创建的对象在调用这个函数
+
+		dialog.className=this.settings.changeClass;
+		dialog.innerHTML=`
+				<div class='title' id='title'>
+					<h4>titile</h4>
+				</div>
+				<i class='closeicon' id='closeicon'>X</i>
+		`;
+		//创建成功后 才可以操作弹窗的元素 点击X关闭弹窗
+		var That=this;
+		this.closeicon=document.getElementById('closeicon');
+		//console.log(this.closeicon);
+		this.closeicon.onclick=function(){
+			console.log(That);
+			That.dialog.className='default-dialog';
+		}
+
+		//判断是否显示遮罩
+		if (this.settings.maskDisplay==true) {
+			this.mask.style.display='block';
+		}else{
+			this.mask.style.display='none';
+		}
+
+		//如果disCenter为true 居中显示
+		if(this.settings.disCenter==true){
+			putInCenter(this.dialog);	
+		}else{
+			this.dialog.style.left='auto';
+			this.dialog.style.right=10+'px';
+			this.dialog.style.top='60%';
+		}
+		//设置titile内容
+		this.title=document.getElementById('title');
+		this.title.innerHTML=this.settings.diaTitle;
+		
+	}
+
+
+	function extendings(obj1,obj2){
+		for (var attr in obj2) {
+			obj1[attr]=obj2[attr];
+		}
+	}
+	function putInCenter(obj){
+		obj.style.left=( (document.documentElement.clientWidth||document.body.clientWidth)-obj.offsetWidth )/2+'px';
+		obj.style.top=( (document.documentElement.clientHeight||document.body.clientHeight)-obj.offsetHeight )/2+'px';
+		obj.style.right='auto';
+	} 
+</script>
+
+<body>
+	<button id='centerDia'>居中弹出</button>
+	<button id='centerDia2'>居中有遮罩</button>
+	<button id='centerDia3'>右下角</button>
+
+	<div class='default-dialog' id='dialog'>
+<!--  		<div class='title'>
+			<h4>titile</h4>
+		</div>
+		<i class='closeicon' id='closeicon'>X</i> -->
+	</div> 
+
+	<div class='mask' id='mask'></div>
+
+</body>
+
+</html>
+<script>
+
+</script>
