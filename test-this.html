@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+
+<style>
+
+</style>
+
+</head>
+<script></script>
+
+<body>
+
+<button id='test'>btn</button>
+
+</body>
+
+</html>
+<script>
+window.onload=function(){
+	var obj={
+		name:'test',
+		doouter:null
+	}
+	obj.doouter=function(a,b){
+		console.log(this);//this指obj。函数作为obj的方法被调用 这时方法里面的this就向上一级找这个对象 就指的这个对象。
+		btn.onclick=function(){
+			console.log('btn.onclick-this:'+this);
+			//doinner();
+			
+			doinner();
+		}
+	}
+
+	var btn=document.getElementById('test');
+	//document.body.onclick=function(){
+		console.log('document.body.onclick:'+this)//如果是点击body之后 this 指body元素。如果没有点击 this指的是window。
+		obj.doouter(2,9);
+		doouter(2,9);
+	//}
+
+
+
+	function doouter(a,b){
+		console.log('function doouter:'+this);//this指window
+		btn.onclick=function(){
+			console.log('btn.onclick-this:'+this);
+			//doinner();
+			
+			doinner();
+		}
+	}
+
+	function doinner(){
+		//alert(a);
+		console.log('doinner-this:'+this);//window
+	};
+}
+</script>
